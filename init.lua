@@ -1,3 +1,3 @@
--- bootstrap lazy.nvim, LazyVim and your plugins
-require("config.lazy")
+require("josean.core")
+require("josean.lazy")
 require("nvim-treesitter.install").compilers = { "zig", "cc", "gcc", "clang" }
