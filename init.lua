@@ -8,3 +8,4 @@ end
 vim.print = _G.dd
 
 require("config.lazy")
+require("nvim-treesitter.install").compilers = { "zig", "cc", "gcc", "clang" }
