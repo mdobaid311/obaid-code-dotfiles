@@ -70,3 +70,11 @@ end)
 keymap.set("n", "<leader>i", function()
 	require("craftzdog.lsp").toggleInlayHints()
 end)
+
+-- Rotate windows
+keymap.set("n", "<Leader>wr", "<C-w>r", opts)
+keymap.set("n", "<Leader>wR", "<C-w>R", opts)
+
+-- Surround shortcuts
+keymap.set("n", "ys", "<cmd>lua require'nvim-surround'.insert_surround()<CR>", opts)
+keymap.set("v", "S", "<cmd>lua require'nvim-surround'.visual_surround()<CR>", opts)
