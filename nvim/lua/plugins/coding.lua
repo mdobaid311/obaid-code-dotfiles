@@ -77,7 +77,6 @@ return {
 			})
 		end,
 	},
-
 	{
 		"simrat39/symbols-outline.nvim",
 		keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
@@ -86,12 +85,33 @@ return {
 			position = "right",
 		},
 	},
-
 	{
 		"nvim-cmp",
 		dependencies = { "hrsh7th/cmp-emoji" },
 		opts = function(_, opts)
 			table.insert(opts.sources, { name = "emoji" })
 		end,
+	},
+	{
+		"mlaursen/vim-react-snippets",
+		event = "InsertEnter", -- Load the snippets when entering Insert mode
+		dependencies = {
+			"honza/vim-snippets", -- Optional: Include additional snippets if desired
+			"dcampos/nvim-snippy", -- Optional: Required if you use UltiSnips for snippet management
+		},
+		config = function()
+			-- Set UltiSnips directories (if using UltiSnips)
+			vim.g.UltiSnipsSnippetDirectories = { "UltiSnips", "vim-react-snippets/snippets" }
+
+			-- Enable jsx support if desired
+			vim.g.react_snippets_use_jsx = 1
+
+			-- Optional: Enable ES6/ES7+ JavaScript/TypeScript snippets
+			vim.g.react_snippets_use_es7 = 1
+		end,
+	},
+	{
+		"tpope/vim-commentary",
+		event = "BufReadPost", -- Lazy-load the plugin when a buffer is read
 	},
 }
