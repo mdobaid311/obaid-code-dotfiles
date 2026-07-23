@@ -1,50 +1,64 @@
-# 🎨 PowerShell Profile (Pretty PowerShell)
+# ⚡ Obaid's PowerShell
 
-A stylish and functional PowerShell profile that looks and feels almost as good as a Linux terminal.
+A fast, futuristic, elegant PowerShell 7 environment. No update checks at
+startup, no network calls, heavy modules lazy-load in the background — the
+shell is ready in a few hundred milliseconds and everything degrades
+gracefully if a tool is missing.
 
-## ⚡ One Line Install (Elevated PowerShell Recommended)
+## Install (fresh machine)
 
-Execute the following command in an elevated PowerShell window to install the PowerShell profile:
+```powershell
+git clone https://github.com/mdobaid311/obaid-code-dotfiles.git H:\Dotfiles
+H:\Dotfiles\PowerShell\setup.ps1
+```
+
+Then set your terminal font to **JetBrainsMono NF** and restart.
+(Windows Terminal is already configured by [windows-terminal/settings.json](../windows-terminal/settings.json).)
+
+## The one command to remember
 
 ```
-irm "https://github.com/ChrisTitusTech/powershell-profile/raw/main/setup.ps1" | iex
+shortcuts            # every command, keybinding and setting, grouped
+shortcuts git        # filter by keyword
+shortcuts -i         # fuzzy-pick with fzf, copies the command to clipboard
 ```
 
-## 🛠️ Fix the Missing Font
+(`cheat` works too.)
 
-After running the script, you'll have two options for installing a font patched to support icons in PowerShell:
+## What's inside
 
-### 1) You will find a downloaded `cove.zip` file in the folder you executed the script from. Follow these steps to install the patched `Caskaydia Cove` nerd font family:
+| Piece | Role |
+|---|---|
+| [Microsoft.PowerShell_profile.ps1](Microsoft.PowerShell_profile.ps1) | The profile — prompt, keybindings, ~60 commands |
+| [Themes/obaid.omp.json](Themes/obaid.omp.json) | Custom oh-my-posh theme (neon cyan / violet on void) |
+| [setup.ps1](setup.ps1) | Idempotent bootstrap for a new machine |
 
-1. Extract the `cove.zip` file.
-2. Locate and install the nerd fonts.
+**Toolchain** (auto-detected, all optional): oh-my-posh · zoxide · fzf + PSFzf ·
+eza · bat · fd · ripgrep · fastfetch · lazygit · Terminal-Icons ·
+CompletionPredictor.
 
-### 2) With `oh-my-posh` (loaded automatically through the PowerShell profile script hosted on this repo):
-1. Run the command `oh-my-posh font install`
-2. A list of Nerd Fonts will appear like so:
-<pre>
-PS> oh-my-posh font install
+## Highlights
 
-   Select font
+- **Prompt** — two-line, git-aware (dirty/ahead/behind change its color),
+  node/python versions appear only inside projects, execution time shows for
+  slow commands, transient prompt collapses old prompts to a single `❯`.
+- **Predictions** — ghost-text + list view from history and completions
+  (`F2` toggles, `→` accepts).
+- **Fuzzy everything** — `Ctrl+r` history, `Ctrl+t` file paths, `fcd`/`fe`/
+  `fkill`/`fbr`/`hist` pickers.
+- **Smart cd** — zoxide learns your directories; `cd proj` jumps from anywhere.
+- **Unix muscle memory** — `touch grep sed which head tail df pkill pgrep
+  export unzip watch`.
+- **Git flow** — `gs ga gc gp gpl gco gb gd gl gundo gcom lazyg lg`.
+- **Kubernetes** — `k kgp kgs kgn kgd kctx kns klog kexec kportfwd`.
 
-  > 0xProto
-    3270
-    Agave
-    AnonymousPro
-    Arimo
-    AurulentSansMono
-    BigBlueTerminal
-    BitstreamVeraSansMono
+## Speed rules baked into the profile
 
-    •••••••••
-    ↑/k up • ↓/j down • q quit • ? more</pre>
-3. With the up/down arrow keys, select the font you would like to install and press <kbd>ENTER</kbd>
-4. DONE!
-   
-## Customize this profile
+1. Nothing touches the network at startup (updates are manual:
+   `Update-PowerShell`, `Update-AllApps`).
+2. Terminal-Icons, PSFzf, CompletionPredictor and gh completions load on the
+   first idle moment *after* the prompt appears.
+3. Every external tool is behind a `Test-Cmd` check with a pure-PowerShell
+   fallback.
 
-**Do not make any changes to the `Microsoft.PowerShell_profile.ps1` file**, since it's hashed and automatically overwritten by any commits to this repository.
-
-After the profile is installed and active, run the `Edit-Profile` function to create a separate profile file for your current user. Make any changes and customizations in this new file named `profile.ps1`.
-
-Now, enjoy your enhanced and stylish PowerShell experience! 🚀
+Set `$env:OBAID_PROFILE_QUIET = 1` to suppress the greeting line.
