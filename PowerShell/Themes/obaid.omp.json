@@ -11,55 +11,91 @@
   "palette": {
     "void": "#0b0e14",
     "surface": "#1e2233",
+    "overlay": "#252a41",
     "line": "#3b4261",
     "dim": "#6b7089",
     "text": "#c8d3f5",
     "cyan": "#7de2ff",
+    "blue": "#82aaff",
     "violet": "#a277ff",
     "magenta": "#ff6ac1",
     "mint": "#5ef1b3",
     "amber": "#ffd580",
+    "orange": "#ff966c",
     "red": "#ff5c8a"
   },
   "blocks": [
     {
       "type": "prompt",
       "alignment": "left",
+      "newline": true,
       "segments": [
         {
           "type": "text",
           "style": "plain",
           "foreground": "p:line",
-          "template": "╭─"
+          "template": "\u256d\u2500"
+        },
+        {
+          "type": "session",
+          "style": "diamond",
+          "background": "p:overlay",
+          "foreground": "p:violet",
+          "foreground_templates": [
+            "{{ if .Root }}p:amber{{ end }}"
+          ],
+          "leading_diamond": "\ue0b6",
+          "trailing_diamond": "\ue0b4",
+          "template": "{{ if or .SSHSession .Root }} {{ if .Root }}\uf0e7 {{ else }}\uf489 {{ end }}{{ .UserName }}{{ if .SSHSession }}@{{ .HostName }}{{ end }} {{ end }}"
         },
         {
           "type": "path",
-          "style": "plain",
+          "style": "diamond",
+          "background": "p:surface",
           "foreground": "p:cyan",
-          "template": " <b> {{ .Path }}</b>",
+          "leading_diamond": "\ue0b6",
+          "trailing_diamond": "\ue0b4",
+          "template": " \uf07b <b>{{ .Path }}</b> ",
           "properties": {
             "style": "agnoster_short",
             "max_depth": 3,
-            "folder_icon": "…",
-            "folder_separator_icon": "<p:line>  </>",
-            "home_icon": " ~"
+            "folder_icon": "\u2026",
+            "folder_separator_icon": "<p:line> \ue0b1 </>",
+            "home_icon": "\uf015 ~"
           }
         },
         {
           "type": "git",
-          "style": "plain",
+          "style": "diamond",
+          "background": "p:surface",
           "foreground": "p:violet",
           "foreground_templates": [
             "{{ if or (.Working.Changed) (.Staging.Changed) }}p:amber{{ end }}",
             "{{ if and (gt .Ahead 0) (gt .Behind 0) }}p:magenta{{ end }}",
+            "{{ if gt .Behind 0 }}p:orange{{ end }}",
             "{{ if gt .Ahead 0 }}p:cyan{{ end }}"
           ],
-          "template": "   {{ .HEAD }}{{ if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} <p:amber> {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }} <p:mint> {{ .Staging.String }}</>{{ end }}{{ if gt .StashCount 0 }} <p:dim> {{ .StashCount }}</>{{ end }}",
+          "leading_diamond": "\ue0b6",
+          "trailing_diamond": "\ue0b4",
+          "template": " \ue0a0 {{ .HEAD }}{{ if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} <p:amber>\uf044 {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }} <p:mint>\uf046 {{ .Staging.String }}</>{{ end }}{{ if gt .StashCount 0 }} <p:dim>\uf01c {{ .StashCount }}</>{{ end }} ",
           "properties": {
             "branch_icon": "",
+            "branch_max_length": 28,
             "fetch_status": true,
             "fetch_upstream_icon": true,
             "fetch_stash_count": true
+          }
+        },
+        {
+          "type": "status",
+          "style": "diamond",
+          "background": "p:surface",
+          "foreground": "p:red",
+          "leading_diamond": "\ue0b6",
+          "trailing_diamond": "\ue0b4",
+          "template": " \uf00d {{ .Code }} ",
+          "properties": {
+            "always_enabled": false
           }
         }
       ]
@@ -71,9 +107,10 @@
           "type": "node",
           "style": "plain",
           "foreground": "p:mint",
-          "template": "  {{ .Full }}",
+          "template": " \ue718 {{ .Full }}",
           "properties": {
             "display_mode": "files",
+            "fetch_package_manager": false,
             "home_enabled": false
           }
         },
@@ -81,7 +118,37 @@
           "type": "python",
           "style": "plain",
           "foreground": "p:amber",
-          "template": "  {{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}",
+          "template": " \ue235 {{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}",
+          "properties": {
+            "display_mode": "files",
+            "home_enabled": false
+          }
+        },
+        {
+          "type": "go",
+          "style": "plain",
+          "foreground": "p:cyan",
+          "template": " \ue627 {{ .Full }}",
+          "properties": {
+            "display_mode": "files",
+            "home_enabled": false
+          }
+        },
+        {
+          "type": "rust",
+          "style": "plain",
+          "foreground": "p:orange",
+          "template": " \ue7a8 {{ .Full }}",
+          "properties": {
+            "display_mode": "files",
+            "home_enabled": false
+          }
+        },
+        {
+          "type": "dotnet",
+          "style": "plain",
+          "foreground": "p:violet",
+          "template": " \ue77f {{ .Full }}",
           "properties": {
             "display_mode": "files",
             "home_enabled": false
@@ -91,7 +158,7 @@
           "type": "executiontime",
           "style": "plain",
           "foreground": "p:magenta",
-          "template": " 󰔛 {{ .FormattedMs }}",
+          "template": " \uf252 {{ .FormattedMs }}",
           "properties": {
             "threshold": 400,
             "style": "austin"
@@ -101,7 +168,7 @@
           "type": "time",
           "style": "plain",
           "foreground": "p:dim",
-          "template": " 󰅐 {{ .CurrentDate | date \"15:04\" }}"
+          "template": " \uf017 {{ .CurrentDate | date \"15:04\" }}"
         }
       ]
     },
@@ -114,17 +181,45 @@
           "type": "text",
           "style": "plain",
           "foreground": "p:line",
-          "template": "╰─{{ if .Root }}<p:amber>⚡</>{{ end }}{{ if gt .Code 0 }}<p:red><b>❯</b></>{{ else }}<p:cyan><b>❯</b></>{{ end }}"
+          "template": "\u2570\u2500{{ if gt .Code 0 }}<p:red><b>\u276f</b></>{{ else }}<p:cyan><b>\u276f</b></>{{ end }}"
         }
       ]
     }
   ],
+  "tooltips": [
+    {
+      "type": "git",
+      "tips": ["git", "g", "lg"],
+      "style": "diamond",
+      "background": "p:overlay",
+      "foreground": "p:mint",
+      "leading_diamond": "\ue0b6",
+      "trailing_diamond": "\ue0b4",
+      "template": " \ue0a0 {{ .HEAD }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }} ",
+      "properties": {
+        "fetch_status": true,
+        "fetch_upstream_icon": true
+      }
+    },
+    {
+      "type": "npm",
+      "tips": ["npm", "pnpm", "yarn"],
+      "style": "diamond",
+      "background": "p:overlay",
+      "foreground": "p:red",
+      "leading_diamond": "\ue0b6",
+      "trailing_diamond": "\ue0b4",
+      "template": " \ue71e {{ .Full }} "
+    }
+  ],
   "transient_prompt": {
     "foreground": "p:cyan",
-    "template": "<b>❯</b> "
+    "background": "transparent",
+    "template": "<p:line>\u276f</><b>\u276f</b> "
   },
   "secondary_prompt": {
     "foreground": "p:line",
-    "template": "│ "
+    "background": "transparent",
+    "template": "\u2502 "
   }
 }

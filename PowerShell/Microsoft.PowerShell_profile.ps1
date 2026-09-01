@@ -409,6 +409,34 @@ Reg 'ports' 'All listening TCP ports + owning process' 'Network'
 function weather { param([string]$City = '') Invoke-RestMethod "https://wttr.in/${City}?format=%l:+%c+%t+%h+%w" }
 Reg 'weather [city]' 'Current weather one-liner' 'Network' 'weather Mumbai'
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  VirtualBox
+# ══════════════════════════════════════════════════════════════════════════════
+# VBoxManage shortcuts (VBoxManage.exe list vms / list runningvms / list ostypes / list hostinfo)
+# VBoxManage shortform command vm
+function vm { VBoxManage @args }
+Reg 'vm <cmd>' 'VBoxManage shortcut' 'VirtualBox'
+
+function vms { VBoxManage list vms }
+Reg 'vms' 'List all registered VMs' 'VirtualBox'
+
+# VBoxManage alias shortcuts (VBoxManage.exe startvm / controlvm / showvminfo / guestproperty)
+function vmstart { param([Parameter(Mandatory)][string]$Name) VBoxManage startvm $Name --type gui }
+Reg 'vmstart <name>' 'Start a VM in GUI mode' 'VirtualBox'
+function vmheadless { param([Parameter(Mandatory)][string]
+$Name) VBoxManage startvm $Name --type headless }
+Reg 'vmheadless <name>' 'Start a VM in headless mode' 'VirtualBox'
+function vmstop { param([Parameter(Mandatory)][string]$Name) VBoxManage controlvm $Name poweroff }
+Reg 'vmstop <name>' 'Stop a VM (poweroff)' 'VirtualBox'
+function vminfo { param([Parameter(Mandatory)][string]$Name) VBoxManage showvminfo $Name }
+Reg 'vminfo <name>' 'Show VM info' 'VirtualBox'
+function vmguest { param([Parameter(Mandatory)][string]$Name, [Parameter(Mandatory)][string]$Property) VBoxManage guestproperty get $Name $Property }   
+Reg 'vmguest <name> <property>' 'Get a guest property' 'VirtualBox'
+
+
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  SYSTEM
 # ══════════════════════════════════════════════════════════════════════════════
